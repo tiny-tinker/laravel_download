@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Classes\BrowserDetection;
+
 class DownloadController extends Controller
 {
     /**
@@ -18,51 +20,42 @@ class DownloadController extends Controller
 
     public function index(Request $request)
     {
-        $id = $request->input('id');
         $ID = $request->input('ID');        
-        if(isset($id))
+        if(isset($ID)) 
         {
             //Detect System and auto download.
+            $browser = new BrowserDetection();
             $file_url = 'SetupOmniBazaar-Windows.exe';
+            $file_ext = '.exe';
+            if($browser->getPlatform() == BrowserDetection::PLATFORM_WINDOWS) {
+                $file_url = 'SetupOmniBazaar-Windows.exe';
+                $file_ext = '.exe';
+            }
+            else if ($browser->getPlatform() == BrowserDetection::PLATFORM_LINUX) {
+                $file_url = 'SetupOmniBazaar-Linux';
+            }
+            else if ($browser->getPlatform() == BrowserDetection::PLATFORM_MACINTOSH) {
+                $file_url = 'SetupOmniBazaar-Mac.dmg';
+            }
+
+            // Donwload file
             header('Content-Type: application/octet-stream');
             header('Content-Transfer-Encoding: Binary'); 
             if (isset($_GET['ID']))
             {
-                header('Content-disposition: attachment; filename="SetupOmniBazaar-'.$_GET['ID'].'.exe"'); 
+                header('Content-disposition: attachment; filename="SetupOmniBazaar-'.$_GET['ID'].$file_ext.'"'); 
             }
             else if (isset($_GET['id']))
             {
-                header('Content-disposition: attachment; filename="SetupOmniBazaar-'.$_GET['id'].'.exe"'); 
+                header('Content-disposition: attachment; filename="SetupOmniBazaar-'.$_GET['id'].$file_ext.'"'); 
             }
             else 
             {
-                header('Content-disposition: attachment; filename="SetupOmniBazaar.exe"'); 
+                header('Content-disposition: attachment; filename="SetupOmniBazaar'.$file_ext.'"'); 
             }
             ob_clean(); flush();
             readfile($file_url);
-            return view('download/index');
-        }
-        else if(isset($ID)) 
-        {
-            //Detect System and auto download.
-            $file_url = 'SetupOmniBazaar-Windows.exe';
-            header('Content-Type: application/octet-stream');
-            header('Content-Transfer-Encoding: Binary'); 
-            if (isset($_GET['ID']))
-            {
-                header('Content-disposition: attachment; filename="SetupOmniBazaar-'.$_GET['ID'].'.exe"'); 
-            }
-            else if (isset($_GET['id']))
-            {
-                header('Content-disposition: attachment; filename="SetupOmniBazaar-'.$_GET['id'].'.exe"'); 
-            }
-            else 
-            {
-                header('Content-disposition: attachment; filename="SetupOmniBazaar.exe"'); 
-            }
-            ob_clean(); flush();
-            readfile($file_url);
-            return view('download/index');
+            return redirect()->route('download.index');
         }
         else
         {
