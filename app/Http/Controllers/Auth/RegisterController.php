@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Factories\ActivationFactory;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -29,14 +31,17 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/support/download';
 
+    protected $activationFactory;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ActivationFactory $activationFactory)
     {
         $this->middleware('guest');
+        $this->activationFactory = $activationFactory;
     }
 
     /**
@@ -67,5 +72,41 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+    
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+    
+        $user = $this->create($request->all());
+    
+        $this->activationFactory->sendActivationMail($user);
+    
+        return redirect('/login')->with('activationStatus', true);
+    }
+    
+    public function activateUser($token)
+    {
+        if ($user = $this->activationFactory->activateUser($token)) {
+            auth()->login($user);
+            return redirect($this->redirectPath());
+        }
+        abort(404);
+    }
+    
+    public function authenticated(Request $request, $user)
+    {
+        if (!$user->activated) {
+            $this->activationFactory->sendActivationMail($user);
+            auth()->logout();
+            return back()->with('activationWarning', true);
+        }
+        return redirect()->intended($this->redirectPath());
     }
 }
