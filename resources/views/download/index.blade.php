@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Download')
+
 @section('content')
 <p>
 Thank you for your interest in OmniBazaar. The OmniBazaar marketplace, including OmniCoin and CryptoBazaar, is open. <br/> <br/>
