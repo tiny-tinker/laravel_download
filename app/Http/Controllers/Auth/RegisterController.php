@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Session;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -88,7 +90,9 @@ class RegisterController extends Controller
     
         $this->activationFactory->sendActivationMail($user);
     
-        return redirect('/login')->with('activationStatus', true);
+        Session::flash('success', trans('auth.activationStatus'));
+        Auth::logout();
+        return redirect('/');
     }
     
     public function activateUser($token)
@@ -98,15 +102,5 @@ class RegisterController extends Controller
             return redirect($this->redirectPath());
         }
         abort(404);
-    }
-    
-    public function authenticated(Request $request, $user)
-    {
-        if (!$user->activated) {
-            $this->activationFactory->sendActivationMail($user);
-            auth()->logout();
-            return back()->with('activationWarning', true);
-        }
-        return redirect()->intended($this->redirectPath());
     }
 }

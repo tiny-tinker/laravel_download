@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use App\Http\Controllers\Auth\Request;
+use Session;
 class LoginController extends Controller
 {
     /*
@@ -35,5 +37,15 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function authenticated($request, User $user)
+    {
+        if (!$user->activated) {
+            auth()->logout();
+            Session::flash('errmsg', trans('auth.activationWarning'));
+            return back()->with('activationWarning', true);
+        }
+        return redirect()->intended($this->redirectPath());
     }
 }
