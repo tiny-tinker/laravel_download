@@ -29,13 +29,13 @@ Please submit any suggestions, bug reports or requests for support to
 <div class="row">    
     <div class="well">
         <h1><span class="fa fa-linux"></span> Linux </h1>
-        <a href="{{ asset('download/SetupOmniBazaar-Linux.exe') }}">Download Installer</a>
+        <p>Comming Soon</p>
     </div>
 </div>
 <div class="row">    
     <div class="well">
         <h1><span class="fa fa-apple"></span> Mac </h1>
-        <a href="{{ asset('download/SetupOmniBazaar-Mac.exe') }}">Download Installer</a>
+        <p>Comming Soon</a>
     </div>
 </div>
 @endsection

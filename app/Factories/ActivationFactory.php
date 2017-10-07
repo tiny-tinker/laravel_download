@@ -28,10 +28,14 @@ class ActivationFactory
         $token = $this->activationRepo->createActivation($user);
 
         $link = route('user.activate', $token);
-        $message = sprintf('Activate account %s', $link, $link);
+        //$message = sprintf('Activate account %s', $link, $link);
+
+        $messagetemplate = "Hello %s,\n\nThank you for registering at OmniBazaar.com. Your account is created and must be activated before you can use it.\nTo activate the account select the following link or copy-paste it in your browser:\n%s \n\nAfter activation you may login to http://download.omniBazaar.com\n";                        
+
+        $message = sprintf($messagetemplate, $user->name, $link);
 
         $this->mailer->raw($message, function (Message $m) use ($user) {
-            $m->to($user->email)->subject('Activation mail');
+            $m->to($user->email)->subject('ACTION REQUIRED -- Activate your new OmniBazaar user account');
         });
     }
 
