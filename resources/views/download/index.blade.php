@@ -29,13 +29,13 @@ Please submit any suggestions, bug reports or requests for support to
 <div class="row">    
     <div class="well">
         <h1><span class="fa fa-linux"></span> Linux </h1>
-        <p>Comming Soon</p>
+        <p>Coming Soon</p>
     </div>
 </div>
 <div class="row">    
     <div class="well">
         <h1><span class="fa fa-apple"></span> Mac </h1>
-        <p>Comming Soon</a>
+        <p>Coming Soon</a>
     </div>
 </div>
 @endsection
