@@ -23,7 +23,7 @@ Please submit any suggestions, bug reports or requests for support to
 <div class="row">    
     <div class="well">
         <h1><span class="fa fa-windows"></span> Windows </h1>
-        <a href="{{ asset('download/SetupOmniBazaar-Windows.exe') }}">Download Installer</a>
+        <a href="{{ route('download.windows') }}">Download Installer</a>
     </div>
 </div>
 <div class="row">    

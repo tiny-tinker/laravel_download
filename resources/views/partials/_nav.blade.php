@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a id="rt-logo" class="navbar-brand" href="#"></a>
+        <a id="rt-logo" class="navbar-brand" href="{{ url('/') }}"></a>
     </div>
     <div class="navbar-collapse collapse">
         <!-- Right nav -->
