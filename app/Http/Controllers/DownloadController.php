@@ -21,7 +21,7 @@ class DownloadController extends Controller
     public function downloadWindows(Request $request)
     {
         //Detect System and auto download.
-
+        return view('download/index');
         
         /*            
         $browser = new BrowserDetection();
