@@ -41,6 +41,9 @@ class DownloadController extends Controller
         header('Content-Type: application/octet-stream');
         header('Content-Transfer-Encoding: Binary'); 
         $file_url = url('/').'/download/SetupOmniBazaar-Windows.exe';        
+        echo $file_url;
+        return;
+
         $file_ext = '.exe';
 
         if ($request->session()->has('referrer_id'))
