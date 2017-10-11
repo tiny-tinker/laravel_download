@@ -55,7 +55,7 @@ class DownloadController extends Controller
             }
             ob_clean(); flush();
             readfile($file_url);
-            return redirect()->route('download.index');
+            return view('download/index');
         }
         else
         {
