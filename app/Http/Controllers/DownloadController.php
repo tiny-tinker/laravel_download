@@ -38,12 +38,12 @@ class DownloadController extends Controller
         }
         */
         // Donwload file
-        header('Content-Type: application/octet-stream');
-        header('Content-Transfer-Encoding: Binary'); 
         $file_url = url('/').'/download/SetupOmniBazaar-Windows.exe';        
         echo $file_url;
         return;
 
+        header('Content-Type: application/octet-stream');
+        header('Content-Transfer-Encoding: Binary'); 
         $file_ext = '.exe';
 
         if ($request->session()->has('referrer_id'))
@@ -56,7 +56,7 @@ class DownloadController extends Controller
             header('Content-disposition: attachment; filename="SetupOmniBazaar'.$file_ext.'"'); 
         }
         ob_clean(); flush();
-        //readfile($file_url);
+        readfile($file_url);
     }
 
     public function index(Request $request)
