@@ -1,0 +1,1 @@
+<p class="text-center"> Copyright 2013-2015 by OmniBazaar, Inc. </p>

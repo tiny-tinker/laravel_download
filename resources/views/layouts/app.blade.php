@@ -14,6 +14,7 @@
 
             @include ('partials._sidebars')
 
+            @include ('partials._footer')
         </div> <!-- /.container -->
     </div>
 
