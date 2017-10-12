@@ -17,7 +17,7 @@
 
     Please submit any suggestions, bug reports or requests for support to 
     </p>
-    <a href="http://support.OmniBazzar.com">http://support.OmniBazzar.com</a> <br/><br/>
+    <a href="http://support.OmniBazaar.com">http://support.OmniBazzar.com</a> <br/><br/>
     <b>By clicking the download button below, you confirm that you have read and agree to be bound by the terms of our <b/><a href="http://omnibazaar.com//OMNIBAZAAR BETA AGREEMENT--Click-Through.pdf">OMNIBAZAAR BETA AGREEMENT.</a>
     <br/>
     <br/>
