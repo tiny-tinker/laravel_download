@@ -16,6 +16,6 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('user/activation/{token}', 'Auth\RegisterController@activateUser')->name('user.activate');
-Route::get('/support/download', 'DownloadController@index')->name('download.index')->middleware('auth.basic');
-Route::get('/support/download/windows', 'DownloadController@downloadWindows')->name('download.windows')->middleware('auth.basic');
+Route::get('user/activation/{token}/{referrer?}', 'Auth\RegisterController@activateUser')->name('user.activate');
+Route::get('/support/download', 'DownloadController@index')->name('download.index');
+Route::get('/support/download/windows', 'DownloadController@downloadWindows')->name('download.windows');

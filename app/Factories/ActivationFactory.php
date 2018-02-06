@@ -6,6 +6,7 @@ use App\User;
 use App\Repositories\ActivationRepository;
 use Illuminate\Mail\Mailer;
 use Illuminate\Mail\Message;
+use Session;
 
 class ActivationFactory
 {
@@ -27,7 +28,9 @@ class ActivationFactory
 
         $token = $this->activationRepo->createActivation($user);
 
-        $link = route('user.activate', $token);
+        $referrer = session('referrer_id');
+
+        $link = route('user.activate', [$token, $referrer]);
         //$message = sprintf('Activate account %s', $link, $link);
 
         $messagetemplate = "Hello %s,\n\nThank you for registering at OmniBazaar.com. Your account is created and must be activated before you can use it.\nTo activate the account select the following link or copy-paste it in your browser:\n%s \n\nAfter activation you may login to http://download.omniBazaar.com\n";                        
@@ -39,7 +42,7 @@ class ActivationFactory
         });
     }
 
-    public function activateUser($token)
+    public function activateUser($token, $referrer)
     {
         $activation = $this->activationRepo->getActivationByToken($token);
 
@@ -52,6 +55,12 @@ class ActivationFactory
         $user->activated = true;
 
         $user->save();
+
+        if ($referrer!=='')
+        {
+            // Store referrer name to session
+            session(['referrer_id'=>$referrer]);
+        }
 
         $this->activationRepo->deleteActivation($token);
 

@@ -95,9 +95,9 @@ class RegisterController extends Controller
         return redirect('/');
     }
     
-    public function activateUser($token)
+    public function activateUser($token, $referrer = '')
     {
-        if ($user = $this->activationFactory->activateUser($token)) {
+        if ($user = $this->activationFactory->activateUser($token, $referrer)) {
             auth()->login($user);
             return redirect($this->redirectPath());
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Classes\BrowserDetection;
 use Session;
 
@@ -15,7 +16,7 @@ class DownloadController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+
     }
 
     public function downloadWindows(Request $request)
@@ -66,8 +67,23 @@ class DownloadController extends Controller
     public function index(Request $request)
     {
         $ID = $request->input('ID');
-        if ($request->session()->has('referrer_id'))
-            $request->session()->forget('referrer_id');
+
+        // If ID is set store the ID to the session
+        if (isset($ID))
+        {
+            $request->session()->put('referrer_id', $ID);
+        }
+
+        if (Auth::check())
+        {
+            //Show download page
+            return view('download/index');
+        }
+        else {
+            return redirect('/login');
+        }
+
+        /*
         if(isset($ID)) 
         {
             $request->session()->put('referrer_id', $ID);
@@ -79,6 +95,6 @@ class DownloadController extends Controller
             //Show download page
             return view('download/index');
         }
-        
+        */
     }
 }
