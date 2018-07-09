@@ -67,7 +67,7 @@ class DownloadController extends Controller
     public function downloadLinux(Request $request)
     {
         $file_url = public_path().'/download/SetupOmniBazaar-Linux.deb';
-        $file_ext = 'deb';
+        $file_ext = '.deb';
 
         if ($request->session()->has('referrer_id'))
         {
@@ -84,7 +84,7 @@ class DownloadController extends Controller
     public function downloadMac(Request $request)
     {
         $file_url = public_path().'/download/SetupOmniBazaar-Mac.pkg';
-        $file_ext = 'pkg';
+        $file_ext = '.pkg';
 
         if ($request->session()->has('referrer_id'))
         {
@@ -100,7 +100,7 @@ class DownloadController extends Controller
 
     public function index(Request $request)
     {
-        $ID = $request->input('ID');
+        $ID = $request->input('ref');
 
         // If ID is set store the ID to the session
         if (isset($ID))
