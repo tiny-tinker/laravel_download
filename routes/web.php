@@ -19,3 +19,5 @@ Auth::routes();
 Route::get('user/activation/{token}/{referrer?}', 'Auth\RegisterController@activateUser')->name('user.activate');
 Route::get('/support/download', 'DownloadController@index')->name('download.index');
 Route::get('/support/download/windows', 'DownloadController@downloadWindows')->name('download.windows');
+Route::get('/support/download/linux', 'DownloadController@downloadLinux')->name('download.linux');
+Route::get('/support/download/mac', 'DownloadController@downloadMac')->name('download.mac');

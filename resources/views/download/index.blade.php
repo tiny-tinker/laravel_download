@@ -3,7 +3,7 @@
 @section('title', 'Download')
 
 @section('content')
-<div class="row margin-0" style="background-color: #fff;">
+<div class="row margin-0">
     <p>
     Thank you for your interest in OmniBazaar. The OmniBazaar marketplace, including OmniCoin and CryptoBazaar, is open. <br/> <br/>
 
@@ -30,13 +30,13 @@
     <div class="row">    
         <div class="well">
             <h1><span class="fa fa-linux"></span> Linux </h1>
-            <p>Coming Soon</p>
+            <a href="{{ route('download.linux') }}">Download Installer</a>
         </div>
     </div>
     <div class="row">    
         <div class="well">
             <h1><span class="fa fa-apple"></span> Mac </h1>
-            <p>Coming Soon</a>
+            <a href="{{ route('download.mac') }}">Download Installer</a>
         </div>
     </div>
 </div>

@@ -17,7 +17,7 @@
                     <li><a href="#">Download</a></li>
                 </ul>
             </li>
-            <li class="active"><a href="bootstrap-navbar.html">About</a></li>
+            <li class="active"><a href="http://omnibazaar.com/index.php/about">About</a></li>
             <!-- 
             <li><a href="bootstrap-navbar-fixed-top.html">Fixed top</a></li>
             <li><a href="bootstrap-navbar-fixed-bottom.html">Fixed bottom</a></li>

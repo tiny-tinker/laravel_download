@@ -64,6 +64,40 @@ class DownloadController extends Controller
         //readfile($file_url);
     }
 
+    public function downloadLinux(Request $request)
+    {
+        $file_url = public_path().'/download/SetupOmniBazaar-Linux.deb';
+        $file_ext = 'deb';
+
+        if ($request->session()->has('referrer_id'))
+        {
+            $referrerid = $request->session()->get('referrer_id', null);
+            $filename = 'SetupOmniBazaar-'.$referrerid.$file_ext;
+            return response()->download($file_url, $filename);
+        }
+        else
+        {
+            return response()->download($file_url);
+        }
+    }
+
+    public function downloadMac(Request $request)
+    {
+        $file_url = public_path().'/download/SetupOmniBazaar-Mac.pkg';
+        $file_ext = 'pkg';
+
+        if ($request->session()->has('referrer_id'))
+        {
+            $referrerid = $request->session()->get('referrer_id', null);
+            $filename = 'SetupOmniBazaar-'.$referrerid.$file_ext;
+            return response()->download($file_url, $filename);
+        }
+        else
+        {
+            return response()->download($file_url);
+        }
+    }
+
     public function index(Request $request)
     {
         $ID = $request->input('ID');
@@ -74,6 +108,8 @@ class DownloadController extends Controller
             $request->session()->put('referrer_id', $ID);
         }
 
+        // Remove the register feature to download app 7/8/2018 - Mark Brandt mwbdevelopment@gmail.com
+        /*
         if (Auth::check())
         {
             //Show download page
@@ -82,6 +118,8 @@ class DownloadController extends Controller
         else {
             return redirect('/login');
         }
+        */
+        return view('download/index');
 
         /*
         if(isset($ID)) 
