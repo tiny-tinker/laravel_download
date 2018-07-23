@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Classes\BrowserDetection;
+use function PHPSTORM_META\type;
 use Session;
+use Illuminate\Support\Facades\Storage;
 
+const DOWNLOAD_TYPE_WINDOWS = 0;
+const DOWNLOAD_TYPE_LINUX = 1;
+const DOWNLOAD_TYPE_MAC = 2;
 class DownloadController extends Controller
 {
     /**
@@ -19,83 +24,99 @@ class DownloadController extends Controller
 
     }
 
-    public function downloadWindows(Request $request)
+    /**
+     * @param type $
+     */
+    private function getLatestFileName($downloadType=DOWNLOAD_TYPE_WINDOWS)
     {
-        //Detect System and auto download.
-        
-        /*            
-        $browser = new BrowserDetection();
-        $file_url = 'SetupOmniBazaar-Windows.exe';
-        $file_ext = '.exe';
-        if($browser->getPlatform() == BrowserDetection::PLATFORM_WINDOWS) {
-            $file_url = 'SetupOmniBazaar-Windows.exe';
-            $file_ext = '.exe';
+        // #1. Get all release file names
+        $allFiles = Storage::disk('release')->files('');
+        switch ($downloadType) {
+            case DOWNLOAD_TYPE_WINDOWS:
+                $pattern_match ='/^OmniBazaar.*exe$/';
+                break;
+            case DOWNLOAD_TYPE_LINUX:
+                $pattern_match ='/^OmniBazaar.*deb$/';
+                break;
+            case DOWNLOAD_TYPE_MAC:
+                $pattern_match ='/^OmniBazaar.*pkg$/';
+                break;
+            default:
+                return -1;
         }
-        else if ($browser->getPlatform() == BrowserDetection::PLATFORM_LINUX) {
-            $file_url = 'SetupOmniBazaar-Linux';
-        }
-        else if ($browser->getPlatform() == BrowserDetection::PLATFORM_MACINTOSH) {
-            $file_url = 'SetupOmniBazaar-Mac.dmg';
-        }
-        */
-        // Donwload file
-        //$file_url = url('/').'/download/SetupOmniBazaar-Windows.exe';        
-        $file_url = public_path().'/download/SetupOmniBazaar-Windows.exe';
-        //echo $file_url;
-        //return;
+        $match_files = preg_grep($pattern_match, $allFiles);
 
-        //header('Content-Type: application/octet-stream');
-        //header('Content-Transfer-Encoding: Binary'); 
-        $file_ext = '.exe';
+        // #2. Extract versions
+        $version_pattern = '/(\d+\.)(\d+\.)(\d+)/';
+        $versions = [];
+        $file_path = [];
+        foreach ($match_files as $match_file) {
+            $matches = [];
+            preg_match ($version_pattern, $match_file, $matches);
+            if ($matches !=null)
+            {
+                $versions[] = $matches[0];
+                $file_path[] = $match_file;
+            }
+        }
+
+        // #3. Get the latest version
+        $latest_version = null;
+        $latest_version_index = -1;
+        if ($versions!= null) {
+            $latest_version = $versions[0];
+            foreach($versions as $key=>$version) {
+                if ($latest_version < $version) {
+                    $latest_version = $version;
+                    $latest_version_index = $key;
+                }
+            }
+        } else {
+            return -1; // No matching download files
+        }
+
+        return $file_path[$latest_version_index];
+    }
+
+    private function checkRefAndDownload($request, $file_url, $file_ext) {
+        $file_download_url = storage_path('app/public/releases/').$file_url;
 
         if ($request->session()->has('referrer_id'))
         {
-            $referrerid = $request->session()->get('referrer_id', null);
-            $filename = 'SetupOmniBazaar-'.$referrerid.$file_ext;
-            return response()->download($file_url, $filename);
-            //header('Content-disposition: attachment; filename="SetupOmniBazaar-'.$referrerid.$file_ext.'"'); 
+            $referrer_id = $request->session()->get('referrer_id', null);
+            $file_name = substr($file_url, 0, strlen($file_url)-4);
+            $download_file_name = $file_name.'-'.$referrer_id.$file_ext;
+            return response()->download($file_download_url, $download_file_name);
+            //return Storage::disk('release')->download($file_url, $download_file_name);
+            //return Storage::disk('release')->download($file_url);
         }
-        else 
+        else
         {
-            //header('Content-disposition: attachment; filename="SetupOmniBazaar'.$file_ext.'"'); 
-            return response()->download($file_url);
+            return response()->download($file_download_url);
+            //return Storage::disk('release')->download($file_url);
         }
-        //ob_clean(); flush();
-        //readfile($file_url);
+    }
+    public function downloadWindows(Request $request)
+    {
+        $file_url = $this->getLatestFileName(DOWNLOAD_TYPE_WINDOWS);;
+        $file_ext = '.exe';
+        return $this->checkRefAndDownload($request, $file_url, $file_ext);
     }
 
     public function downloadLinux(Request $request)
     {
-        $file_url = public_path().'/download/SetupOmniBazaar-Linux.deb';
+        $file_url = $this->getLatestFileName(DOWNLOAD_TYPE_LINUX);;
         $file_ext = '.deb';
 
-        if ($request->session()->has('referrer_id'))
-        {
-            $referrerid = $request->session()->get('referrer_id', null);
-            $filename = 'SetupOmniBazaar-'.$referrerid.$file_ext;
-            return response()->download($file_url, $filename);
-        }
-        else
-        {
-            return response()->download($file_url);
-        }
+        return $this->checkRefAndDownload($request, $file_url, $file_ext);
     }
 
     public function downloadMac(Request $request)
     {
-        $file_url = public_path().'/download/SetupOmniBazaar-Mac.pkg';
+        $file_url = $this->getLatestFileName(DOWNLOAD_TYPE_LINUX);;
         $file_ext = '.pkg';
 
-        if ($request->session()->has('referrer_id'))
-        {
-            $referrerid = $request->session()->get('referrer_id', null);
-            $filename = 'SetupOmniBazaar-'.$referrerid.$file_ext;
-            return response()->download($file_url, $filename);
-        }
-        else
-        {
-            return response()->download($file_url);
-        }
+        return $this->checkRefAndDownload($request, $file_url, $file_ext);
     }
 
     public function index(Request $request)
@@ -108,31 +129,6 @@ class DownloadController extends Controller
             $request->session()->put('referrer_id', $ID);
         }
 
-        // Remove the register feature to download app 7/8/2018 - Mark Brandt mwbdevelopment@gmail.com
-        /*
-        if (Auth::check())
-        {
-            //Show download page
-            return view('download/index');
-        }
-        else {
-            return redirect('/login');
-        }
-        */
         return view('download/index');
-
-        /*
-        if(isset($ID)) 
-        {
-            $request->session()->put('referrer_id', $ID);
-            //Show download page
-            return view('download/index');            
-        }
-        else
-        {
-            //Show download page
-            return view('download/index');
-        }
-        */
     }
 }
