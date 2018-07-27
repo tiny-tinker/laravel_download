@@ -113,7 +113,7 @@ class DownloadController extends Controller
 
     public function downloadMac(Request $request)
     {
-        $file_url = $this->getLatestFileName(DOWNLOAD_TYPE_LINUX);;
+        $file_url = $this->getLatestFileName(DOWNLOAD_TYPE_MAC);;
         $file_ext = '.pkg';
 
         return $this->checkRefAndDownload($request, $file_url, $file_ext);

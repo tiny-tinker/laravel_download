@@ -56,7 +56,7 @@ return [
         ],
         'release' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/releases'),
+            'root' => storage_path(env('RELEASE_FILE_PATH', 'app/public/releases')),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
