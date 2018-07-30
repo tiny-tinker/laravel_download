@@ -21,3 +21,8 @@ Route::get('/support/download', 'DownloadController@index')->name('download.inde
 Route::get('/support/download/windows', 'DownloadController@downloadWindows')->name('download.windows');
 Route::get('/support/download/linux', 'DownloadController@downloadLinux')->name('download.linux');
 Route::get('/support/download/mac', 'DownloadController@downloadMac')->name('download.mac');
+
+Route::get('/support/publisherDownload', 'PublisherDownloadController@index')->name('publisherDownload.index');
+Route::get('/support/publisherDownload/windows', 'PublisherDownloadController@downloadWindows')->name('publisherDownload.windows');
+Route::get('/support/publisherDownload/linux', 'PublisherDownloadController@downloadLinux')->name('publisherDownload.linux');
+Route::get('/support/publisherDownload/mac', 'PublisherDownloadController@downloadMac')->name('publisherDownload.mac');
