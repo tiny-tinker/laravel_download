@@ -8,6 +8,8 @@ use App\Classes\BrowserDetection;
 use function PHPSTORM_META\type;
 use Session;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 const DOWNLOAD_TYPE_WINDOWS = 0;
 const DOWNLOAD_TYPE_LINUX = 1;
@@ -86,7 +88,25 @@ class DownloadController extends Controller
             $referrer_id = $request->session()->get('referrer_id', null);
             $file_name = substr($file_url, 0, strlen($file_url)-4);
             $download_file_name = $file_name.'-'.$referrer_id.$file_ext;
-            return response()->download($file_download_url, $download_file_name);
+            if ($file_ext != '.deb') {
+                return response()->download($file_download_url, $download_file_name);
+            } else {
+                // Run repackage script
+
+                $script_path = storage_path('app/public/releases');
+                $process_url = 'sh '.$script_path.'/set_referrer.sh '.$referrer_id.' '.$file_download_url.' '.$script_path.'/'.$download_file_name;
+                //dd($process_url);
+                
+                $process = new Process($process_url);
+                $process->run();
+
+                if (!$process->isSuccessful()) {
+                    throw new ProcessFailedException($process);
+                } else {
+                    return response()->download($download_file_name);
+                }
+            }
+                
             //return Storage::disk('release')->download($file_url, $download_file_name);
             //return Storage::disk('release')->download($file_url);
         }
