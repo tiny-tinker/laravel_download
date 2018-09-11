@@ -24,17 +24,17 @@ class WhitePaperDownloadController extends Controller {
             'Arabic'        => 'العربية',
             'Chinese'       => '中文',
             'English'       => 'English',
-            'French'        => 'français',
+            'French'        => 'Français',
             'Gujarati'      => 'ગુજરાતી',
             'Hindi'         => 'हिंदी',
             'Indonesian'    => 'Bahasa Indonesia',
             'Italian'       => 'italiano',
-            'Portugese'     => 'português',
-            'Russian'       => 'русский',
+            'Portugese'     => 'Português',
+            'Russian'       => 'Pусский',
             'Ukranian'      => 'Українська',
             'Vietnamese'    => 'Tiếng Việt'
         ];
-        
+
         $allFiles = Storage::disk('whitepaperRelease')->files('');
 
         foreach ($allFiles as $file) {
