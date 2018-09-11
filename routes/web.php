@@ -22,7 +22,10 @@ Route::get('/support/download/windows', 'DownloadController@downloadWindows')->n
 Route::get('/support/download/linux', 'DownloadController@downloadLinux')->name('download.linux');
 Route::get('/support/download/mac', 'DownloadController@downloadMac')->name('download.mac');
 
-Route::get('/support/publisherDownload', 'PublisherDownloadController@index')->name('publisherDownload.index');
-Route::get('/support/publisherDownload/windows', 'PublisherDownloadController@downloadWindows')->name('publisherDownload.windows');
-Route::get('/support/publisherDownload/linux', 'PublisherDownloadController@downloadLinux')->name('publisherDownload.linux');
-Route::get('/support/publisherDownload/mac', 'PublisherDownloadController@downloadMac')->name('publisherDownload.mac');
+Route::get('/support/publisher', 'PublisherDownloadController@index')->name('publisherDownload.index');
+Route::get('/support/publisher/windows', 'PublisherDownloadController@downloadWindows')->name('publisherDownload.windows');
+Route::get('/support/publisher/linux', 'PublisherDownloadController@downloadLinux')->name('publisherDownload.linux');
+Route::get('/support/publisher/mac', 'PublisherDownloadController@downloadMac')->name('publisherDownload.mac');
+
+Route::get('/support/whitepaper','WhitePaperDownloadController@index')->name('whitepaperDownload.index');
+Route::get('/support/whitepaper/{file}', 'WhitePaperDownloadController@download')->name('whitepaperDownload.download');

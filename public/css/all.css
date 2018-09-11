@@ -88,7 +88,7 @@ body {
     flex-flow: column;
 }
 
-.download-link {
+.download-link, .download-whitepaper {
     cursor: pointer;
 }
 
@@ -108,5 +108,21 @@ body {
 
 #fader p {
     color: white;
+    text-align: center;
+}
+
+.links-container {
+    display: block;
+    margin-top: 50px;
+    min-height: 300px;
+    
+}
+
+.links-container a {
+    float: left;
+    display: block;
+    width: 140px;
+    height: 40px;
+    overflow: hidden;
     text-align: center;
 }

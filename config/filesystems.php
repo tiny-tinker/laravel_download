@@ -66,7 +66,12 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
-
+        'whitepaperRelease' => [
+            'driver' => 'local',
+            'root'  => storage_path(env('WHITEPAPER_FILE_PATH', 'app/public/whitepaper')),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_KEY'),
