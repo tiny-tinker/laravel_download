@@ -7,6 +7,13 @@
 </head>
 <body>
     <div id="app">
+        <div id="fader">
+            <div class="mk-spinner-wrap">
+                <div class="mk-spinner-weight"></div>
+            </div>
+            <h1 class="text-center text-white">Please wait...</h1>
+            <p>We are preparing the file to download.</p>
+        </div>
         <div class="container">
             @include('partials._messages')
 

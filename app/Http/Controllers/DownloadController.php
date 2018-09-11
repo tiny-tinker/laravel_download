@@ -10,6 +10,7 @@ use Session;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Cookie;
 
 const DOWNLOAD_TYPE_WINDOWS = 0;
 const DOWNLOAD_TYPE_LINUX = 1;
@@ -89,31 +90,30 @@ class DownloadController extends Controller
             $file_name = substr($file_url, 0, strlen($file_url)-4);
             $download_file_name = $file_name.'-'.$referrer_id.$file_ext;
             if ($file_ext != '.deb') {
+                Cookie::queue('downloadStarted', 1, 20, '/', '', false, false);
                 return response()->download($file_download_url, $download_file_name);
             } else {
-                // Run repackage script
 
+                // Run repackage script
                 $script_path = storage_path('app/public/releases');
-                $process_url = 'sh '.$script_path.'/set_referrer.sh '.$referrer_id.' '.$file_download_url.' '.$script_path.'/'.$download_file_name;
-                //dd($process_url);
-                
+                $process_url = 'sh '.$script_path.'/set_referrer.sh '.$referrer_id.' '.$file_download_url.' '.$script_path.'/'.$download_file_name;                
                 $process = new Process($process_url);
+                $process->setTimeout(120);
                 $process->run();
 
                 if (!$process->isSuccessful()) {
                     throw new ProcessFailedException($process);
                 } else {
-                    return response()->download($download_file_name);
+                    $file_download_url = storage_path('app/public/releases/').$download_file_name;  
+                    Cookie::queue('downloadStarted', 1, 20, '/', '', false, false);
+                    return response()->download($file_download_url, $download_file_name)->deleteFileAfterSend(true);;
                 }
             }
-                
-            //return Storage::disk('release')->download($file_url, $download_file_name);
-            //return Storage::disk('release')->download($file_url);
         }
         else
-        {
+        {   
+            Cookie::queue('downloadStarted', 1, 20, '/', '', false, false);
             return response()->download($file_download_url);
-            //return Storage::disk('release')->download($file_url);
         }
     }
     public function downloadWindows(Request $request)

@@ -8,6 +8,7 @@
 <title>@yield('title')</title>
 
 <!-- Styles -->
+<link href="{{ asset('css/mk-spinners.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 <link href="{{ asset('css/all.css') }}" rel="stylesheet">
 <link href="{{ asset('plugins/smartmenus-1.1.0/addons/bootstrap/jquery.smartmenus.bootstrap.css')}}" rel="stylesheet">

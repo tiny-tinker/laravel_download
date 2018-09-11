@@ -73,3 +73,40 @@ body {
     padding-top: 100px;
     background-color: rgba(255, 255, 255, 0.9);
 }
+
+#fader {    
+    background: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+
+.download-link {
+    cursor: pointer;
+}
+
+.mk-spinner-weight {
+    background: white;
+    animation-duration: 0.8s;
+}
+
+.mk-spinner-weight:before, .mk-spinner-weight:after {
+    border-color: white;
+}
+
+#fader h1 {
+    color: white;
+    text-align: center;
+}
+
+#fader p {
+    color: white;
+    text-align: center;
+}
